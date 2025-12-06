@@ -25,9 +25,9 @@
     <h2 class="text-4xl font-semibold mb-6">Login</h2>
     <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" class="space-y-5">
       <input formControlName="username" type="text" placeholder="Username" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
-      <div class="input-group flex">
-        <input formControlName="password" type="password" placeholder="Password" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
-        <button type="button" (click)="togglePassword()">
+      <div class="input-group flex border border-gray-300 rounded-xl focus-within:ring-2 focus-within:ring-indigo-400">
+        <input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Password" class="w-full px-4 py-3 outline-none"/>
+        <button type="button" (click)="togglePassword()" class="mr-3.5">
           <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
         </button>
       </div>
