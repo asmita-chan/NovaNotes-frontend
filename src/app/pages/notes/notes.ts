@@ -6,6 +6,7 @@ import { NoteService } from '../../services/note-service';
 import { ToastrService } from 'ngx-toastr';
 import { ChangeDetectorRef } from '@angular/core';
 import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notes',
@@ -14,21 +15,12 @@ import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
   styleUrl: './notes.css',
 })
 export class Notes {
-  constructor(private noteService: NoteService, private toastr: ToastrService, private cd: ChangeDetectorRef, private spinner: NgxSpinnerService){}
+  constructor(private noteService: NoteService, private toastr: ToastrService, private cd: ChangeDetectorRef, private spinner: NgxSpinnerService, private router: Router){}
   ngOnInit(){
     this.spinner.show();
     this.userId = sessionStorage.getItem('userId');
     this.getAllNotes();
   }
-  // searchText = '';
-  // notes: any;
-  // filteredNotes() {
-  //   if (!this.searchText) return this.notes;
-  //   return this.notes.filter((n: any) =>
-  //     n.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
-  //     n.content.toLowerCase().includes(this.searchText.toLowerCase())
-  //   );
-  // }
   userId: any;
   notesListAll: any[] = [];
   title: any;
@@ -37,33 +29,36 @@ export class Notes {
   notesId: any;
   showAddNote: Boolean = false;
   showUpdateNote: Boolean = false;
-  // deleted : Boolean = false;
-
+  showProfileMenu: any;
   username: String = 'Asmita';
   cardColors: any[] = [
-  "linear-gradient(135deg, #FFD6E8, #FF9ACB)",  // pink
-  "linear-gradient(135deg, #D6F1FF, #8BD1FF)",  // blue
-  "linear-gradient(135deg, #E8FFD6, #B4FF8B)",  // green
-  "linear-gradient(135deg, #FFF6D6, #FFE18B)",  // yellow
-  "linear-gradient(135deg, #EBD6FF, #C69AFF)",  // purple
-  "linear-gradient(135deg, #ffecec9c, #ff93939c)",
-];
-  showProfileMenu: any;
-  toggleProfileMenu() {
-    throw new Error('Method not implemented.');
-  }
+    "linear-gradient(135deg, #FFD6E8, #FF9ACB)",  // pink
+    "linear-gradient(135deg, #D6F1FF, #8BD1FF)",  // blue
+    "linear-gradient(135deg, #E8FFD6, #B4FF8B)",  // green
+    "linear-gradient(135deg, #FFF6D6, #FFE18B)",  // yellow
+    "linear-gradient(135deg, #EBD6FF, #C69AFF)",  // purple
+    "linear-gradient(135deg, #ffecec9c, #ff93939c)"
+  ];
   notes = [];
   searchText = "";
   menuOpen = false;
 
+  logout() {
+    this.spinner.show();
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('userId');
+    this.router.navigate(['']);
+    this.spinner.hide();
+  }
+  toggleProfileMenu() {
+    this.showProfileMenu = !this.showProfileMenu;
+  }
   get userInitial() {
     return sessionStorage.getItem("username")?.charAt(0).toUpperCase() || "U";
   }
-
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
-
   filteredNotes() {
     if (!this.searchText) return this.notes;
     const s = this.searchText.toLowerCase();
