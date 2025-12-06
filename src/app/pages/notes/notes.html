@@ -1,0 +1,110 @@
+<!-- <p>notes works!</p> -->
+<div class="min-h-screen flex flex-col" style="background: linear-gradient(135deg, #e2e9f4, #eae3f4, #c7e9d0, #eadde3, #e3d0c9, #ff93939c);">
+
+  <!-- HEADER -->
+  <header class="flex justify-between items-center px-8 py-5 sticky top-0 z-50">
+    <h1 class="text-3xl font-semibold">Dashboard</h1>
+    <div class="flex items-center gap-4">
+      <!-- Search -->
+      <input type="text" [(ngModel)]="searchText" placeholder="Search notes..." class="bg-white px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none w-64" />
+      <!-- Profile Avatar -->
+      <div class="relative">
+        <div (click)="toggleProfileMenu()" class="w-10 h-10 flex items-center justify-center rounded-full bg-indigo-500 text-white cursor-pointer">
+          {{ username[0] | uppercase }}
+        </div>
+        <!-- Fly-out menu -->
+        <div *ngIf="showProfileMenu" class="absolute right-0 mt-2 bg-white shadow-lg rounded-xl p-3 w-40 border">
+          <p class="hover:bg-gray-100 p-2 rounded cursor-pointer">Forgot Password</p>
+          <p class="hover:bg-gray-100 p-2 rounded cursor-pointer">Logout</p>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- BODY -->
+  <main class="flex-1 overflow-y-auto p-8">
+    <ngx-spinner bdColor="rgba(255,255,255,0.4)" size="medium" color="#6C5CE7" type="ball-spin-clockwise" [fullScreen]="true"></ngx-spinner>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- NOTE CARDS -->
+      <div *ngFor="let note of notesListAll; let i = index" class="note-card transition-all duration-300" [class.fade-out]="note._deleted" [ngStyle]="{'background': cardColors[i % cardColors.length]}" (click)="openUpdateModal(note)">
+        <div class="flex justify-between">
+          <h2 class="note-title">{{ note.title }}</h2>
+          <button (click)="deleteNote(note, $event)">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+        <div>
+          <p class="note-body line-clamp-4 whitespace-pre-line">{{ note.content }}</p>
+        </div>
+        <div style="margin-left: 82%; margin-top: 7%;">
+          <i *ngIf="note.isDone" class="fa-regular fa-circle-check absolute bottom-3 right-3" style="font-size: xxx-large; color: mediumseagreen;"></i>
+        </div>
+      </div>
+      <!-- ADD NOTE CARD -->
+      <div (click)="openAddModal()" class=" bg-gray-100 flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed border-gray-300 hover:bg-gray-200 transition cursor-pointer min-h-full">     
+        <i class="fa fa-plus" style="font-size: xxx-large; color: darkseagreen;"></i>
+        <p class="mt-2">Add Note</p>
+      </div>
+    </div>
+  </main>
+  <!-- FOOTER -->
+  <footer class="text-center py-4">
+    © 2025 NovaNotes · v1.0
+  </footer>
+</div>
+
+<!-- ADD NOTE MODAL -->
+<div *ngIf="showAddNote" class="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center" (click)="closeAddModal()">
+  <div class="bg-white p-10 rounded-2xl shadow-2xl w-[40%] max-w-3xl" (click)="$event.stopPropagation()">
+    <div class="flex items-center gap-2 justify-between">
+      <h2 class="text-2xl font-semibold mb-6">New Note</h2>
+      <div class="flex items-center gap-3 cursor-pointer" (click)="isDone = !isDone">
+        <div class="big-check" [class.checked]="isDone">
+          <i class="fa fa-check tick-icon"></i>
+        </div>
+      </div>
+    </div>
+    <div class="mb-5">
+      <input type="text" [(ngModel)]="title" placeholder="Title" class="w-full bg-transparent border-b border-gray-300 focus:border-black focus:outline-none pb-2 text-lg"/>
+    </div>
+    <div class="mb-6">
+      <textarea [(ngModel)]="content" rows="5" placeholder="Write your note..." class="w-full bg-transparent border-b border-gray-300 focus:border-black focus:outline-none pb-2 text-base resize-none"></textarea>
+    </div>
+    <div class="flex justify-end gap-4">
+      <button class="px-4 py-2 rounded-lg bg-orange-300 hover:bg-orange-200 font-medium shadow-sm text-black transition" (click)="closeAddModal()">
+        Cancel
+      </button>
+      <button class="px-5 py-2 rounded-lg bg-emerald-400 text-black font-medium shadow-sm hover:bg-emerald-300 transition" (click)="addNote()">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showUpdateNote" class="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center" (click)="closeUpdateModal()">
+  <div class="bg-white p-10 rounded-2xl shadow-2xl w-[40%] max-w-3xl" (click)="$event.stopPropagation()">
+    <div class="flex items-center gap-2 justify-between">
+      <h2 class="text-2xl font-semibold mb-6">Update Note</h2>
+      <div class="flex items-center gap-3 cursor-pointer" (click)="isDone = !isDone">
+        <div class="big-check" [class.checked]="isDone">
+          <i class="fa fa-check tick-icon"></i>
+        </div>
+      </div>
+    </div>
+    <div class="mb-5">
+      <input type="text" [(ngModel)]="title" placeholder="Title" class="w-full bg-transparent border-b border-gray-300 focus:border-black focus:outline-none pb-2 text-lg"/>
+    </div>
+    <div class="mb-6">
+      <textarea [(ngModel)]="content" rows="5" placeholder="Write your note..." class="whitespace-pre-wrap w-full bg-transparent border-b border-gray-300 focus:border-black focus:outline-none pb-2 text-base resize-none"></textarea>
+    </div>
+    <div class="flex justify-end gap-4">
+      <button class="px-4 py-2 rounded-lg bg-orange-300 hover:bg-orange-200 font-medium shadow-sm text-black transition" (click)="closeUpdateModal()">
+        Cancel
+      </button>
+      <button class="px-5 py-2 rounded-lg bg-emerald-400 text-black font-medium shadow-sm hover:bg-emerald-300 transition" (click)="updateNote()">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
+
