@@ -1,1 +1,56 @@
-<p>landing works!</p>
+<!-- <p>landing works!</p> -->
+<div class="floating-squares">
+  <span *ngFor="let s of [].constructor(20)"></span>
+</div>
+
+<div class="min-h-screen flex flex-col items-center justify-center text-center px-4 bg-cover bg-center">
+  <div *ngIf="!showLogin && !showSignup" class="w-full max-w-xl p-10 rounded-3xl bg-white/40 backdrop-blur-md shadow-xl border border-white/30">
+    <h1 class="text-5xl font-bold mb-4">
+      NovaNotes
+    </h1>
+    <p class="text-lg text-gray-700 max-w-md mx-auto mb-8">
+      Fast, simple and clean note-taking. All your ideas in one place.
+    </p>
+    <button (click)="openLogin()" class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition text-lg mr-7">
+      Login
+    </button>
+    <button (click)="openSignup()" class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition text-lg">
+      Sign Up
+    </button>
+  </div>
+  <div *ngIf="showLogin" class="w-full max-w-xl p-10 rounded-3xl bg-white/40 backdrop-blur-md shadow-xl border border-white/30 transition-all duration-300">
+    <button (click)="goBack()" class="text-left w-full mb-3 text-gray-700 hover:text-indigo-600 transition">
+      ← Back
+    </button>
+    <h2 class="text-4xl font-semibold mb-6">Login</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" class="space-y-5">
+      <input formControlName="username" type="text" placeholder="Username" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
+      <div class="input-group flex">
+        <input formControlName="password" type="password" placeholder="Password" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
+        <button type="button" (click)="togglePassword()">
+          <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+        </button>
+      </div>
+      <button type="submit" class="w-full py-3 bg-indigo-600 text-white text-lg rounded-xl hover:bg-indigo-700 transition disabled:bg-indigo-300" [disabled]="loginForm.invalid">
+        Login
+      </button>
+    </form>
+  </div>
+  <div *ngIf="showSignup" class="w-full max-w-xl p-10 rounded-3xl bg-white/40 backdrop-blur-md shadow-xl border border-white/30 transition-all duration-300">
+    <button (click)="goBack()" class="text-left w-full mb-3 text-gray-700 hover:text-indigo-600 transition">
+      ← Back
+    </button>
+    <h2 class="text-4xl font-semibold mb-6">Create Account</h2>
+    <form [formGroup]="signupForm" (ngSubmit)="submitSignup()" class="space-y-5">
+      <input formControlName="name" type="text" placeholder="Full Name" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
+      <input formControlName="email" type="email" placeholder="Email" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
+      <input formControlName="mobile" type="text" placeholder="Mobile Number" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
+      <input formControlName="username" type="text" placeholder="Username" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
+      <input formControlName="password" type="password" placeholder="Password" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
+      <button type="submit" class="w-full py-3 bg-indigo-600 text-white text-lg rounded-xl hover:bg-indigo-700 transition disabled:bg-indigo-300" [disabled]="signupForm.invalid">
+        Sign Up
+      </button>
+    </form>
+  </div>
+</div>
+
