@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ChangeDetectorRef } from '@angular/core';
 import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-notes',
@@ -15,14 +16,17 @@ import { Router } from '@angular/router';
   styleUrl: './notes.css',
 })
 export class Notes {
-  constructor(private noteService: NoteService, private toastr: ToastrService, private cd: ChangeDetectorRef, private spinner: NgxSpinnerService, private router: Router){}
+  constructor(private noteService: NoteService, private toastr: ToastrService, private cd: ChangeDetectorRef, private spinner: NgxSpinnerService, private router: Router, private ar: ActivatedRoute){}
   ngOnInit(){
     this.spinner.show();
+    this.name = history.state?.name;
+    console.log("name", this.name);
     this.userId = sessionStorage.getItem('userId');
     this.getAllNotes();
   }
   userId: any;
   notesListAll: any[] = [];
+  notesListFiltered: any[] = [];
   title: any;
   content: any;
   isDone: Boolean = false;
@@ -30,7 +34,7 @@ export class Notes {
   showAddNote: Boolean = false;
   showUpdateNote: Boolean = false;
   showProfileMenu: any;
-  username: String = 'Asmita';
+  name: String = '';
   cardColors: any[] = [
     "linear-gradient(135deg, #FFD6E8, #FF9ACB)",  // pink
     "linear-gradient(135deg, #D6F1FF, #8BD1FF)",  // blue
@@ -59,10 +63,13 @@ export class Notes {
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
-  filteredNotes() {
-    if (!this.searchText) return this.notes;
-    const s = this.searchText.toLowerCase();
-    return;
+  filterNotes() {
+    const text = this.searchText.trim().toLowerCase();
+    if(text === ""){
+      this.notesListFiltered = [...this.notesListAll];
+      return;
+    }
+    this.notesListFiltered = this.notesListAll.filter(note => note.title.toLowerCase().includes(text) || note.content.toLowerCase().includes(text));
   }
   openAddModal() {
     this.showAddNote = true;
@@ -91,6 +98,7 @@ export class Notes {
     this.noteService.getAllNotes(postJson).subscribe({
       next: (res) => {
         this.notesListAll = res;
+        this.notesListFiltered = [...this.notesListAll];
         this.spinner.hide();
         this.cd.detectChanges();
       },

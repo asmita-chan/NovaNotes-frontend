@@ -6,11 +6,11 @@
     <h1 class="text-3xl font-semibold" style="color: brown; font-family:'Pacifico', sans-serif;">Dashboard</h1>
     <div class="flex items-center gap-4">
       <!-- Search -->
-      <input type="text" [(ngModel)]="searchText" placeholder="Search notes..." class="bg-white px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none w-64" />
+      <input type="text" (input)="filterNotes()" [(ngModel)]="searchText" placeholder="Search notes..." class="bg-white px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none w-64" />
       <!-- Profile Avatar -->
       <div class="relative">
         <div (click)="toggleProfileMenu()" class="w-10 h-10 flex items-center justify-center rounded-full bg-indigo-500 text-white cursor-pointer">
-          {{ username[0] | uppercase }}
+          {{ name[0] | uppercase }}
         </div>
         <!-- Fly-out menu -->
         <div *ngIf="showProfileMenu" class="absolute right-0 mt-2 bg-white shadow-lg rounded-xl p-3 w-40 flex justify-between cursor-pointer hover:bg-gray-100" (click)="logout()">
@@ -25,7 +25,7 @@
     <ngx-spinner bdColor="rgba(255,255,255,0.4)" size="medium" color="#6C5CE7" type="ball-spin-clockwise" [fullScreen]="true"></ngx-spinner>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       <!-- NOTE CARDS -->
-      <div *ngFor="let note of notesListAll; let i = index" class="note-card transition-all duration-300" [class.fade-out]="note._deleted" [ngStyle]="{'background': cardColors[i % cardColors.length]}" (click)="openUpdateModal(note)">
+      <div *ngFor="let note of notesListFiltered; let i = index" class="note-card transition-all duration-300" [class.fade-out]="note._deleted" [ngStyle]="{'background': cardColors[i % cardColors.length]}" (click)="openUpdateModal(note)">
         <div class="flex justify-between">
           <h2 class="note-title">{{ note.title }}</h2>
           <button (click)="deleteNote(note, $event)">

@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Auth } from '../../services/auth';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
 @Component({
@@ -68,7 +68,7 @@ export class Landing {
           sessionStorage.setItem("accessToken", res.loginResponse.token);
           console.log("Signup Success: ", res);
           this.toastr.success("Login Success");
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/dashboard'], {state: { name: res.loginResponse.name }});
         }
         else if(res.StatusCode === '417'){
           console.log("Exception ---->", res)
