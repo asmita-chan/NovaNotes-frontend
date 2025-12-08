@@ -101,7 +101,7 @@ export class Landing {
           sessionStorage.setItem("accessToken", res.loginResponse.token);
           console.log("Signup Success: ", res);
           this.toastr.success("Sign Up Successful");
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/dashboard'], {state: { name: res.loginResponse.name }});
           // window.open("/notes/notes", "_self");
         }
         else if(res.StatusCode === '417'){
