@@ -28,7 +28,7 @@
       <div class="input-group flex border border-gray-300 rounded-xl focus-within:ring-2 focus-within:ring-indigo-400">
         <input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Password" class="w-full px-4 py-3 outline-none"/>
         <button type="button" (click)="togglePassword()" class="mr-3.5">
-          <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
         </button>
       </div>
       <button type="submit" class="w-full py-3 bg-indigo-600 text-white text-lg rounded-xl hover:bg-indigo-700 transition disabled:bg-indigo-300" [disabled]="loginForm.invalid">
@@ -46,7 +46,12 @@
       <input formControlName="email" type="email" placeholder="Email" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
       <input formControlName="mobile" type="text" placeholder="Mobile Number" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
       <input formControlName="username" type="text" placeholder="Username" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
-      <input formControlName="password" type="password" placeholder="Password" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"/>
+      <div class="flex border border-gray-300 focus:ring-2 focus:ring-indigo-400 rounded-xl">
+        <input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Password" class="w-full px-4 py-3 outline-none"/>
+        <button type="button" (click)="togglePassword()" class="mr-3.5">
+          <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
+        </button>
+      </div>
       <button type="submit" class="w-full py-3 bg-indigo-600 text-white text-lg rounded-xl hover:bg-indigo-700 transition disabled:bg-indigo-300" [disabled]="signupForm.invalid">
         Sign Up
       </button>

@@ -8,5 +8,5 @@ RUN npm run build --prod
 
 # Step 2: Serve
 FROM nginx:stable
-COPY --from=build /novanotes/dist/frontend /usr/share/nginx/html
+COPY --from=build /novanotes/dist/frontend/browser /usr/share/nginx/html
 EXPOSE 80
