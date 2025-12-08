@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-landing',
@@ -35,9 +36,9 @@ export class Landing {
       }
     )
   }
-  BACKEND_URL: String = 'http://localhost:8080';
+  BASE_URL: String = environment.BASE_URL;
   getApi(): Observable<any>{
-    return this.http.get<any>(`${this.BACKEND_URL}/`);
+    return this.http.get<any>(`${this.BASE_URL}/`);
   }
   showLogin: Boolean = false;
   showSignup: Boolean = false;
