@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ export class NoteService {
 
   constructor(private http:HttpClient){}
 
-  BASE_URL: String = 'http://localhost:8080';
+  BASE_URL: String = environment.BASE_URL;
   getAllNotes(postJson: any): Observable<any[]>{
     return this.http.post<any>(`${this.BASE_URL}/getAllNotes`, postJson);
   }

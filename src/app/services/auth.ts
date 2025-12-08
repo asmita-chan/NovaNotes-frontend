@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 export class Auth {
   constructor(private http: HttpClient){}
 
-  BASE_URL: String = 'http://localhost:8080';
+  BASE_URL: String = environment.BASE_URL;
   getLogin(postJson: any): Observable<any> {
     return this.http.post<any>(`${this.BASE_URL}/auth/login`, postJson);
   }
