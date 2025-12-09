@@ -175,6 +175,9 @@ export class Notes {
         setTimeout(() => {
           this.showUpdateNote = false;
         }, 0);
+        this.title = '';
+        this.content = '';
+        this.isDone = false;
         this.toastr.success("Note Updated!");
         this.cd.detectChanges();
       },
