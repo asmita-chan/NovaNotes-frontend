@@ -8,6 +8,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-notes',
@@ -51,8 +52,9 @@ export class Notes {
     this.spinner.show();
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('userId');
-    this.router.navigate(['']);
-    this.spinner.hide();
+    this.router.navigate(['']).then(() => {
+      this.spinner.hide();
+    });
   }
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
@@ -95,17 +97,15 @@ export class Notes {
     let postJson = {
       "createdBy": this.userId
     }
-    this.noteService.getAllNotes(postJson).subscribe({
+    this.noteService.getAllNotes(postJson).pipe(finalize(() => this.spinner.hide())).subscribe({
       next: (res) => {
         this.notesListAll = res;
         this.notesListFiltered = [...this.notesListAll];
-        this.spinner.hide();
         this.cd.detectChanges();
       },
       error: (err) => {
         this.toastr.error("Please try again later.", "Unable to fetch notes.")
         console.error(err);
-        this.spinner.hide();
         this.cd.detectChanges();
       }
     })
@@ -122,7 +122,8 @@ export class Notes {
       "activeFlag": "true",
       "createdBy": this.userId
     }
-    this.noteService.addNote(postJson).subscribe({
+    this.spinner.show();
+    this.noteService.addNote(postJson).pipe(finalize(() => this.spinner.hide())).subscribe({
       next: (res) => {
         this.getAllNotes();
         this.toastr.success("Note Added!");
@@ -147,7 +148,8 @@ export class Notes {
     let postJson = {
       "notesId": note.notesId
     }
-    this.noteService.deleteNote(postJson).subscribe({
+    this.spinner.show();
+    this.noteService.deleteNote(postJson).pipe(finalize(() => this.spinner.hide())).subscribe({
       next: (res) => {
         setTimeout(() => {
           this.getAllNotes(), 700
@@ -169,7 +171,8 @@ export class Notes {
       "isDone": this.isDone,
       "activeFlag": "true"
     }
-    this.noteService.updateNote(postJson).subscribe({
+    this.spinner.show();
+    this.noteService.updateNote(postJson).pipe(finalize(() => this.spinner.hide())).subscribe({
       next: (res) => {
         this.getAllNotes();
         setTimeout(() => {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -8,15 +8,16 @@ import { Auth } from '../../services/auth';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-landing',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxSpinnerModule],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
 })
 export class Landing {
-  constructor(private http: HttpClient, private fb: FormBuilder, private authService: Auth, private toastr: ToastrService, private router: Router){
+  constructor(private http: HttpClient, private fb: FormBuilder, private authService: Auth, private toastr: ToastrService, private router: Router, private spinner: NgxSpinnerService){
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, (control: AbstractControl) => control.value && control.value.trim().length > 0 ? null : { whitespace: true }]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(12), (control: AbstractControl) => control.value && control.value.trim().length > 0 ? null : { whitespace: true }]]
@@ -62,7 +63,8 @@ export class Landing {
       "username": this.loginForm.get('username')?.value,
       "password": this.loginForm.get('password')?.value
     }
-    this.authService.getLogin(postJson).subscribe({
+    this.spinner.show();
+    this.authService.getLogin(postJson).pipe(finalize(() => this.spinner.hide())).subscribe({
       next: (res) => {
         if(res.StatusCode === '200'){
           sessionStorage.setItem("userId", res.loginResponse.userId);
@@ -95,7 +97,8 @@ export class Landing {
       "userPwd": this.signupForm.get('password')?.value,
       "activeFlag": "true"
     }
-    this.authService.getSignup(postJson).subscribe({
+    this.spinner.show();
+    this.authService.getSignup(postJson).pipe(finalize(() => this.spinner.hide())).subscribe({
       next: (res) => {
         if(res.StatusCode === '200'){
           sessionStorage.setItem("userId", res.loginResponse.userId);
