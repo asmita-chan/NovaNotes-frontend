@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-landing',
